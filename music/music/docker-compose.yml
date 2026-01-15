@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: musicdb
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: musicuser
+      MYSQL_PASSWORD: musicpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
+    networks:
+      - music-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      - music-network
+
+  app:
+    build: .
+    container_name: app
+    restart: on-failure
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "7070:7070"
+    environment:
+      # Estas variáveis vão sobrescrever o application.properties
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/musicdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&connectTimeout=60000&socketTimeout=30000
+      SPRING_DATASOURCE_USERNAME: musicuser
+      SPRING_DATASOURCE_PASSWORD: musicpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_FLYWAY_ENABLED: "false"  # Desabilitar Flyway temporariamente para testar
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    networks:
+      - music-network
+
+networks:
+  music-network:
+    name: music-network
+    driver: bridge
+
+volumes:
+  mysql_data:
