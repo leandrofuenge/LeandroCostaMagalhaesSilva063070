@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList; 
-
 
 @Entity
 @Table(name = "musicas")
@@ -23,20 +21,22 @@ public class Musica {
     @Column(nullable = false, length = 100)
     private String titulo;
     
+    @Column(name = "duracao_segundos")  // snake_case
     private Integer duracaoSegundos; // duração em segundos
     
-    @Column(name = "numero_faixa")
+    @Column(name = "numero_faixa")  // snake_case
     private Integer numeroFaixa;
     
     @Column(length = 50)
     private String formato; // MP3, FLAC, WAV, etc.
     
+    @Column(name = "vezes_tocada")  // snake_case
     private Integer vezesTocada = 0;
     
     @Column(length = 500)
     private String letra;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
     
@@ -48,9 +48,20 @@ public class Musica {
     )
     private List<Genero> generos = new ArrayList<>();
     
+    // Setter correto para album - **CORRIGIDO**
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+    
+    // Getter correto - **CORRIGIDO**
+    public Integer getDuracaoSegundos() {
+        return duracaoSegundos;
+    }
+    
     // Método para obter duração formatada
     @Transient
     public String getDuracaoFormatada() {
+        if (duracaoSegundos == null) return "0:00";
         int minutos = duracaoSegundos / 60;
         int segundos = duracaoSegundos % 60;
         return String.format("%d:%02d", minutos, segundos);

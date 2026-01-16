@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "artistas")
+@Table(name = "artistas")  // Note: 'artistas' em português
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Artista {
 
-      @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -36,7 +36,7 @@ public class Artista {
     @Column(length = 100)
     private String website;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "regional_id")
     private Regional regional;
     
