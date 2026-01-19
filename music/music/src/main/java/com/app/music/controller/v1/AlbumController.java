@@ -1,4 +1,4 @@
-package com.app.music.controller;
+package com.app.music.controller.v1;
 
 import com.app.music.dto.AlbumRequest;
 import com.app.music.dto.AlbumResponse;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/albuns")
+@RequestMapping("/api/v1/albuns")
 public class AlbumController {
 
     private final AlbumService albumService;

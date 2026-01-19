@@ -1,4 +1,4 @@
-package com.app.music.controller;
+package com.app.music.controller.v1;
 
 import com.app.music.security.JwtService;
 import org.springframework.web.bind.annotation.*;
