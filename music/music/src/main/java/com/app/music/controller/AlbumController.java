@@ -45,4 +45,14 @@ public class AlbumController {
     public List<AlbumResponse> listarPorArtista(@PathVariable Long artistaId) {
         return albumService.listarPorArtista(artistaId);
     }
+    
+    // 🔹 ATUALIZAR ÁLBUM (LEGADO)
+    @PutMapping("/{id}")
+    public AlbumResponse atualizar(
+            @PathVariable Long id,
+            @RequestBody AlbumRequest request
+    ) {
+        return albumService.atualizar(id, request);
+    }
+
 }

@@ -81,4 +81,34 @@ public class AlbumService {
                 p.getArtistaNome()
         );
     }
+    
+    public AlbumResponse atualizar(Long albumId, AlbumRequest request) {
+
+        // 🔎 Verifica se o álbum existe
+        AlbumComArtistaProjection existente =
+                albumRepository.buscarPorId(albumId);
+
+        if (existente == null) {
+            throw new RuntimeException("Álbum não encontrado");
+        }
+
+        // 🔄 Atualiza via SQL legado
+        albumRepository.atualizar(
+                albumId,
+                request.getTitulo(),
+                request.getAnoLancamento(),
+                request.getTipo(),
+                request.getGravadora(),
+                request.getDescricao(),
+                request.getNumeroFaixas(),
+                request.getPreco().doubleValue()
+        );
+
+        // 🔁 Retorna o álbum atualizado
+        AlbumComArtistaProjection atualizado =
+                albumRepository.buscarPorId(albumId);
+
+        return mapToResponse(atualizado);
+    }
+
 }

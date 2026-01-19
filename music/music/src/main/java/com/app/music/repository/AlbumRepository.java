@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
-    // 🔹 LISTAR TODOS COM ARTISTA (SQL LEGADO CORRETO)
+    // 🔹 LISTAR TODOS COM ARTISTA (SQL LEGADO)
     @Query(value = """
         SELECT 
             a.id,
@@ -88,4 +88,30 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
             @Param("preco") Double preco,
             @Param("artistaId") Long artistaId
     );
+
+    // 🔹 UPDATE LEGADO ✅ (ADICIONADO)
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE albuns
+           SET titulo = :titulo,
+               ano_lancamento = :anoLancamento,
+               tipo = :tipo,
+               gravadora = :gravadora,
+               descricao = :descricao,
+               numero_faixas = :numeroFaixas,
+               preco = :preco
+         WHERE id = :id
+        """, nativeQuery = true)
+    void atualizar(
+            @Param("id") Long id,
+            @Param("titulo") String titulo,
+            @Param("anoLancamento") Integer anoLancamento,
+            @Param("tipo") String tipo,
+            @Param("gravadora") String gravadora,
+            @Param("descricao") String descricao,
+            @Param("numeroFaixas") Integer numeroFaixas,
+            @Param("preco") Double preco
+    );
 }
+            		
