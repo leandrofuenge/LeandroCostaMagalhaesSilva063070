@@ -3,6 +3,7 @@ package com.app.music.controller.v1;
 import com.app.music.dto.ArtistaRequest;
 import com.app.music.dto.ArtistaResponse;
 import com.app.music.service.ArtistaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ArtistaController {
     // 🔹 CRIAR
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ArtistaResponse criar(@RequestBody ArtistaRequest request) {
+    public ArtistaResponse criar(@Valid @RequestBody ArtistaRequest request) {
         return artistaService.criar(request);
     }
 
@@ -41,7 +42,7 @@ public class ArtistaController {
     @PutMapping("/{id}")
     public ArtistaResponse atualizar(
             @PathVariable Long id,
-            @RequestBody ArtistaRequest request
+            @Valid @RequestBody ArtistaRequest request
     ) {
         return artistaService.atualizar(id, request);
     }

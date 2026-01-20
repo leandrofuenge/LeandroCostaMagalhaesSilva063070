@@ -3,6 +3,7 @@ package com.app.music.controller.v1;
 import com.app.music.dto.AlbumRequest;
 import com.app.music.dto.AlbumResponse;
 import com.app.music.service.AlbumService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class AlbumController {
     @ResponseStatus(HttpStatus.CREATED)
     public AlbumResponse criar(
             @PathVariable Long artistaId,
-            @RequestBody AlbumRequest request
+            @Valid @RequestBody AlbumRequest request
     ) {
         return albumService.criar(artistaId, request);
     }
@@ -45,14 +46,13 @@ public class AlbumController {
     public List<AlbumResponse> listarPorArtista(@PathVariable Long artistaId) {
         return albumService.listarPorArtista(artistaId);
     }
-    
+
     // 🔹 ATUALIZAR ÁLBUM (LEGADO)
     @PutMapping("/{id}")
     public AlbumResponse atualizar(
             @PathVariable Long id,
-            @RequestBody AlbumRequest request
+            @Valid @RequestBody AlbumRequest request
     ) {
         return albumService.atualizar(id, request);
     }
-
 }

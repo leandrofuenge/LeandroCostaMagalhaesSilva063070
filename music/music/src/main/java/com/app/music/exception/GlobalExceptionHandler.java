@@ -5,15 +5,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 🔐 JWT inválido / expirado
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<?> handleJwt(JwtException ex) {
         return ResponseEntity
@@ -24,6 +28,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // 🚫 Acesso negado
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity
@@ -34,6 +39,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // 🔑 Credenciais inválidas
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity
@@ -44,6 +50,50 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // ❌ Validação de DTO (@Valid)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+
+        Map<String, String> fields = new HashMap<>();
+
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            fields.put(error.getField(), error.getDefaultMessage());
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "timestamp", Instant.now(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "error", "Validation error",
+                        "message", "Campos inválidos",
+                        "fields", fields
+                ));
+    }
+
+    // 🔎 Recurso não encontrado (404)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(error(
+                        HttpStatus.NOT_FOUND,
+                        ex.getMessage()
+                ));
+    }
+
+    // ⚠️ Regra de negócio
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<?> handleBusiness(BusinessException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error(
+                        HttpStatus.BAD_REQUEST,
+                        ex.getMessage()
+                ));
+    }
+
+    // 💥 Erro genérico
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {
         return ResponseEntity
@@ -54,6 +104,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    // 🔧 Padrão de resposta
     private Map<String, Object> error(HttpStatus status, String message) {
         return Map.of(
                 "timestamp", Instant.now(),
