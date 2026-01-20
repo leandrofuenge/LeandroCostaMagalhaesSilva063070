@@ -69,4 +69,26 @@ public class AlbumController {
         return ResponseEntity.ok(page);
     }
     
+    @GetMapping("/tipo-artista")
+    @Operation(summary = "Lista álbuns por tipo de artista (CANTOR ou BANDA)")
+    public ResponseEntity<Page<AlbumResponse>> listarPorTipoArtista(
+            @RequestParam String tipo,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                albumService.listarPorTipoArtista(tipo, pageable)
+        );
+    }
+
+    @GetMapping("/buscar-por-artista")
+    @Operation(summary = "Busca álbuns pelo nome do artista com ordenação")
+    public ResponseEntity<Page<AlbumResponse>> buscarPorNomeArtista(
+            @RequestParam String nome,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                albumService.buscarPorNomeArtista(nome, pageable)
+        );
+    }
+    
 }

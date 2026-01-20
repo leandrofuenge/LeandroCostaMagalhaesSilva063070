@@ -139,6 +139,62 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     	        FROM Album a
     	    """
     	)
-    	Page<AlbumComArtistaProjection> listarPaginado(Pageable pageable);
+    	Page<AlbumComArtistaProjection> listarPaginado(Pageable pageable
+    	
+    );
+    
+    @Query(
+    	    value = """
+    	        SELECT 
+    	            a.id AS id,
+    	            a.titulo AS titulo,
+    	            a.anoLancamento AS anoLancamento,
+    	            a.tipo AS tipo,
+    	            a.gravadora AS gravadora,
+    	            a.descricao AS descricao,
+    	            a.duracaoTotal AS duracaoTotal,
+    	            a.numeroFaixas AS numeroFaixas,
+    	            a.preco AS preco,
+    	            ar.id AS artistaId,
+    	            ar.nome AS artistaNome
+    	        FROM Album a
+    	        JOIN a.artista ar
+    	        WHERE UPPER(ar.tipo) = UPPER(:tipo)
+    	    """,
+    	    countQuery = """
+    	        SELECT COUNT(a)
+    	        FROM Album a
+    	        JOIN a.artista ar
+    	        WHERE UPPER(ar.tipo) = UPPER(:tipo)
+    	    """
+    	)
+    	Page<AlbumComArtistaProjection> listarPorTipoArtista(
+    	    @Param("tipo") String tipo,
+    	    Pageable pageable
+    	);
+
+    @Query("""
+    	    SELECT 
+    	        a.id AS id,
+    	        a.titulo AS titulo,
+    	        a.anoLancamento AS anoLancamento,
+    	        a.tipo AS tipo,
+    	        a.gravadora AS gravadora,
+    	        a.descricao AS descricao,
+    	        a.duracaoTotal AS duracaoTotal,
+    	        a.numeroFaixas AS numeroFaixas,
+    	        a.preco AS preco,
+    	        ar.id AS artistaId,
+    	        ar.nome AS artistaNome
+    	    FROM Album a
+    	    JOIN a.artista ar
+    	    WHERE LOWER(ar.nome) LIKE LOWER(CONCAT('%', :nome, '%'))
+    	""")
+    	Page<AlbumComArtistaProjection> buscarPorNomeArtista(
+    	    @Param("nome") String nome,
+    	    Pageable pageable
+    	);
+
+
 }   
-            		
+            

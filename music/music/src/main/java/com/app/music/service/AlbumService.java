@@ -119,7 +119,17 @@ public class AlbumService {
                 .listarPaginado(pageable)
                 .map(this::mapToResponse);
     }
+    
+    public Page<AlbumResponse> listarPorTipoArtista(String tipo, Pageable pageable) {
+        return albumRepository
+                .listarPorTipoArtista(tipo, pageable)
+                .map(this::mapToResponse);
+    }
+    
+    public Page<AlbumResponse> buscarPorNomeArtista(String nome, Pageable pageable) {
+        return albumRepository
+                .buscarPorNomeArtista(nome, pageable)
+                .map(this::mapToResponse);
+    }
 
 }
-
-
