@@ -2,6 +2,9 @@ package com.app.music.dto;
 
 import java.math.BigDecimal;
 
+import com.app.music.entity.Album;
+import com.app.music.entity.Artista;
+
 public class AlbumResponse {
 
     private Long id;
@@ -87,4 +90,23 @@ public class AlbumResponse {
     public String getArtistaNome() {
         return artistaNome;
     }
+    
+    public static AlbumResponse fromEntity(Album album) {
+        Artista artista = album.getArtista();
+
+        return new AlbumResponse(
+                album.getId(),
+                album.getTitulo(),
+                album.getAnoLancamento(),
+                album.getTipo(),
+                album.getGravadora(),
+                album.getDescricao(),
+                album.getDuracaoTotal(),
+                album.getNumeroFaixas(),
+                album.getPreco(),
+                artista != null ? artista.getId() : null,
+                artista != null ? artista.getNome() : null
+        );
+    }
+   
 }

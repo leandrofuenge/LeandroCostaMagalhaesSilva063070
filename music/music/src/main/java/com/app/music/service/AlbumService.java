@@ -6,6 +6,9 @@ import com.app.music.entity.Artista;
 import com.app.music.repository.AlbumRepository;
 import com.app.music.repository.ArtistaRepository;
 import com.app.music.projection.AlbumComArtistaProjection;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,5 +113,13 @@ public class AlbumService {
 
         return mapToResponse(atualizado);
     }
+    
+    public Page<AlbumResponse> listarAlbums(Pageable pageable) {
+        return albumRepository
+                .listarPaginado(pageable)
+                .map(this::mapToResponse);
+    }
 
 }
+
+

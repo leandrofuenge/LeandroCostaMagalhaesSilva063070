@@ -3,8 +3,14 @@ package com.app.music.controller.v1;
 import com.app.music.dto.AlbumRequest;
 import com.app.music.dto.AlbumResponse;
 import com.app.music.service.AlbumService;
+
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +36,7 @@ public class AlbumController {
     }
 
     // 🔹 LISTAR TODOS
-    @GetMapping
+    @GetMapping("/all")
     public List<AlbumResponse> listarTodos() {
         return albumService.listarTodos();
     }
@@ -55,4 +61,12 @@ public class AlbumController {
     ) {
         return albumService.atualizar(id, request);
     }
+    
+    @GetMapping("/paginacao")
+    @Operation(summary = "Lista álbuns com paginação")
+    public ResponseEntity<Page<AlbumResponse>> listarComPaginacao(Pageable pageable) {
+        Page<AlbumResponse> page = albumService.listarAlbums(pageable);
+        return ResponseEntity.ok(page);
+    }
+    
 }

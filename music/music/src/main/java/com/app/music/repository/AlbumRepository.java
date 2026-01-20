@@ -2,6 +2,9 @@ package com.app.music.repository;
 
 import com.app.music.entity.Album;
 import com.app.music.projection.AlbumComArtistaProjection;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,5 +116,29 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
             @Param("numeroFaixas") Integer numeroFaixas,
             @Param("preco") Double preco
     );
-}
+    
+    @Query(
+    	    value = """
+    	        SELECT 
+    	            a.id AS id,
+    	            a.titulo AS titulo,
+    	            a.anoLancamento AS anoLancamento,
+    	            a.tipo AS tipo,
+    	            a.gravadora AS gravadora,
+    	            a.descricao AS descricao,
+    	            a.duracaoTotal AS duracaoTotal,
+    	            a.numeroFaixas AS numeroFaixas,
+    	            a.preco AS preco,
+    	            ar.id AS artistaId,
+    	            ar.nome AS artistaNome
+    	        FROM Album a
+    	        JOIN a.artista ar
+    	    """,
+    	    countQuery = """
+    	        SELECT COUNT(a)
+    	        FROM Album a
+    	    """
+    	)
+    	Page<AlbumComArtistaProjection> listarPaginado(Pageable pageable);
+}   
             		
