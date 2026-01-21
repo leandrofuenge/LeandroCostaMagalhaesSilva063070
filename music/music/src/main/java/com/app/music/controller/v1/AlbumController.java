@@ -3,10 +3,9 @@ package com.app.music.controller.v1;
 import com.app.music.dto.AlbumRequest;
 import com.app.music.dto.AlbumResponse;
 import com.app.music.service.AlbumService;
-
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/albuns")
+@Tag(name = "Álbuns", description = "Endpoints para gerenciamento de álbuns")
 public class AlbumController {
 
     private final AlbumService albumService;
@@ -25,70 +25,52 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-    // 🔹 CRIAR ÁLBUM (LEGADO)
+    @Operation(summary = "Cria um novo álbum para um artista")
     @PostMapping("/artista/{artistaId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public AlbumResponse criar(
-            @PathVariable Long artistaId,
-            @Valid @RequestBody AlbumRequest request
-    ) {
+    public AlbumResponse criar(@PathVariable Long artistaId, @Valid @RequestBody AlbumRequest request) {
         return albumService.criar(artistaId, request);
     }
 
-    // 🔹 LISTAR TODOS
+    @Operation(summary = "Lista todos os álbuns")
     @GetMapping("/all")
     public List<AlbumResponse> listarTodos() {
         return albumService.listarTodos();
     }
 
-    // 🔹 BUSCAR POR ID
+    @Operation(summary = "Busca um álbum pelo ID")
     @GetMapping("/{id}")
     public AlbumResponse buscarPorId(@PathVariable Long id) {
         return albumService.buscarPorId(id);
     }
 
-    // 🔹 LISTAR POR ARTISTA
+    @Operation(summary = "Lista álbuns de um artista específico")
     @GetMapping("/artista/{artistaId}")
     public List<AlbumResponse> listarPorArtista(@PathVariable Long artistaId) {
         return albumService.listarPorArtista(artistaId);
     }
 
-    // 🔹 ATUALIZAR ÁLBUM (LEGADO)
+    @Operation(summary = "Atualiza um álbum existente")
     @PutMapping("/{id}")
-    public AlbumResponse atualizar(
-            @PathVariable Long id,
-            @Valid @RequestBody AlbumRequest request
-    ) {
+    public AlbumResponse atualizar(@PathVariable Long id, @Valid @RequestBody AlbumRequest request) {
         return albumService.atualizar(id, request);
     }
-    
-    @GetMapping("/paginacao")
+
     @Operation(summary = "Lista álbuns com paginação")
+    @GetMapping("/paginacao")
     public ResponseEntity<Page<AlbumResponse>> listarComPaginacao(Pageable pageable) {
-        Page<AlbumResponse> page = albumService.listarAlbums(pageable);
-        return ResponseEntity.ok(page);
-    }
-    
-    @GetMapping("/tipo-artista")
-    @Operation(summary = "Lista álbuns por tipo de artista (CANTOR ou BANDA)")
-    public ResponseEntity<Page<AlbumResponse>> listarPorTipoArtista(
-            @RequestParam String tipo,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(
-                albumService.listarPorTipoArtista(tipo, pageable)
-        );
+        return ResponseEntity.ok(albumService.listarAlbums(pageable));
     }
 
-    @GetMapping("/buscar-por-artista")
-    @Operation(summary = "Busca álbuns pelo nome do artista com ordenação")
-    public ResponseEntity<Page<AlbumResponse>> buscarPorNomeArtista(
-            @RequestParam String nome,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(
-                albumService.buscarPorNomeArtista(nome, pageable)
-        );
+    @Operation(summary = "Lista álbuns por tipo de artista (CANTOR ou BANDA)")
+    @GetMapping("/tipo-artista")
+    public ResponseEntity<Page<AlbumResponse>> listarPorTipoArtista(@RequestParam String tipo, Pageable pageable) {
+        return ResponseEntity.ok(albumService.listarPorTipoArtista(tipo, pageable));
     }
-    
+
+    @Operation(summary = "Busca álbuns pelo nome do artista com ordenação")
+    @GetMapping("/buscar-por-artista")
+    public ResponseEntity<Page<AlbumResponse>> buscarPorNomeArtista(@RequestParam String nome, Pageable pageable) {
+        return ResponseEntity.ok(albumService.buscarPorNomeArtista(nome, pageable));
+    }
 }

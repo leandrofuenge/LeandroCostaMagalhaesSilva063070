@@ -1,35 +1,38 @@
+# ==========================
 # Estágio de build com Maven
-FROM maven:3.9-eclipse-temurin-21 AS build
+# ==========================
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copiar arquivos do projeto
+# Copiar apenas pom.xml e baixar dependências
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copiar código fonte
 COPY src ./src
 
-# Baixar dependências (cache layer)
-RUN mvn dependency:go-offline
+# Build do projeto (skip testes)
+RUN mvn clean package -DskipTests -B -Dmaven.compiler.encoding=UTF-8
 
-# Build do projeto
-RUN mvn clean package -DskipTests
-
+# ==========================
 # Estágio de runtime
-FROM eclipse-temurin:21-jre-jammy
+# ==========================
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Instalar dependências do sistema
-RUN apt-get update && apt-get install -y \
-    curl \
+# Instalar curl
+RUN apt-get update && apt-get install -y curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar o arquivo WAR gerado
+# Copiar WAR do estágio de build
 COPY --from=build /app/target/*.war app.war
 
-# Expor porta da aplicação
+# Porta da aplicação
 EXPOSE 7070
 
-# Health check
+# Health check Spring Boot actuator
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:7070/actuator/health || exit 1
 
-# Comando para iniciar a aplicação
+# Iniciar aplicação
 ENTRYPOINT ["java", "-jar", "app.war", "--server.port=7070"]
