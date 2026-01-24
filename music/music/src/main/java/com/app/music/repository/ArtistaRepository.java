@@ -17,7 +17,7 @@ public interface ArtistaRepository extends JpaRepository<Artista, Long> {
     @Query(value = "SELECT * FROM artistas WHERE id = :id", nativeQuery = true)
     Artista buscarPorId(@Param("id") Long id);
 
-    // 🔹 INSERT LEGADO
+    // 🔹 INSERT 
     @Modifying
     @Transactional
     @Query(value = """
@@ -36,7 +36,7 @@ public interface ArtistaRepository extends JpaRepository<Artista, Long> {
             @Param("regionalId") Long regionalId
     );
 
-    // 🔹 UPDATE LEGADO
+    // 🔹 UPDATE 
     @Modifying
     @Transactional
     @Query(value = """

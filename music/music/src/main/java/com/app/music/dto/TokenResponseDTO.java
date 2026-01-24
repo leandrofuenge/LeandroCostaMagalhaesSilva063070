@@ -19,5 +19,4 @@ public class TokenResponseDTO {
         this.refreshToken = refreshToken;
     }
 
-    // getters e setters
 }

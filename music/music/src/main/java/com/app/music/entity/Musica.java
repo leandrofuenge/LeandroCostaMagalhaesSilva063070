@@ -1,17 +1,11 @@
 package com.app.music.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "musicas")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Musica {
     
     @Id
@@ -21,16 +15,16 @@ public class Musica {
     @Column(nullable = false, length = 100)
     private String titulo;
     
-    @Column(name = "duracao_segundos")  // snake_case
-    private Integer duracaoSegundos; // duração em segundos
+    @Column(name = "duracao_segundos")
+    private Integer duracaoSegundos;
     
-    @Column(name = "numero_faixa")  // snake_case
+    @Column(name = "numero_faixa")
     private Integer numeroFaixa;
     
     @Column(length = 50)
-    private String formato; // MP3, FLAC, WAV, etc.
+    private String formato;
     
-    @Column(name = "vezes_tocada")  // snake_case
+    @Column(name = "vezes_tocada")
     private Integer vezesTocada = 0;
     
     @Column(length = 500)
@@ -48,14 +42,119 @@ public class Musica {
     )
     private List<Genero> generos = new ArrayList<>();
     
-    // Setter correto para album - **CORRIGIDO**
+    // Construtores
+    public Musica() {
+    }
+    
+    public Musica(Long id, String titulo, Integer duracaoSegundos, Integer numeroFaixa, 
+                  String formato, Integer vezesTocada, String letra, Album album, 
+                  List<Genero> generos) {
+        this.id = id;
+        this.titulo = titulo;
+        this.duracaoSegundos = duracaoSegundos;
+        this.numeroFaixa = numeroFaixa;
+        this.formato = formato;
+        this.vezesTocada = vezesTocada != null ? vezesTocada : 0;
+        this.letra = letra;
+        this.album = album;
+        this.generos = generos != null ? generos : new ArrayList<>();
+    }
+    
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public String getTitulo() {
+        return titulo;
+    }
+    
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+    
+    public Integer getDuracaoSegundos() {
+        return duracaoSegundos;
+    }
+    
+    public void setDuracaoSegundos(Integer duracaoSegundos) {
+        this.duracaoSegundos = duracaoSegundos;
+    }
+    
+    public Integer getNumeroFaixa() {
+        return numeroFaixa;
+    }
+    
+    public void setNumeroFaixa(Integer numeroFaixa) {
+        this.numeroFaixa = numeroFaixa;
+    }
+    
+    public String getFormato() {
+        return formato;
+    }
+    
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
+    
+    public Integer getVezesTocada() {
+        return vezesTocada;
+    }
+    
+    public void setVezesTocada(Integer vezesTocada) {
+        this.vezesTocada = vezesTocada != null ? vezesTocada : 0;
+    }
+    
+    public String getLetra() {
+        return letra;
+    }
+    
+    public void setLetra(String letra) {
+        this.letra = letra;
+    }
+    
+    public Album getAlbum() {
+        return album;
+    }
+    
     public void setAlbum(Album album) {
         this.album = album;
     }
     
-    // Getter correto - **CORRIGIDO**
-    public Integer getDuracaoSegundos() {
-        return duracaoSegundos;
+    public List<Genero> getGeneros() {
+        return generos;
+    }
+    
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos != null ? generos : new ArrayList<>();
+    }
+    
+    // Métodos helper para gêneros
+    public void addGenero(Genero genero) {
+        if (!generos.contains(genero)) {
+            generos.add(genero);
+            if (!genero.getMusicas().contains(this)) {
+                genero.getMusicas().add(this);
+            }
+        }
+    }
+    
+    public void removeGenero(Genero genero) {
+        generos.remove(genero);
+        genero.getMusicas().remove(this);
+    }
+    
+    // Método para incrementar contador de reproduções
+    public void incrementarVezesTocada() {
+        if (this.vezesTocada == null) {
+            this.vezesTocada = 1;
+        } else {
+            this.vezesTocada++;
+        }
     }
     
     // Método para obter duração formatada
@@ -65,5 +164,30 @@ public class Musica {
         int minutos = duracaoSegundos / 60;
         int segundos = duracaoSegundos % 60;
         return String.format("%d:%02d", minutos, segundos);
+    }
+    
+    // equals e hashCode baseados no ID
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Musica musica = (Musica) o;
+        return id != null && id.equals(musica.id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+    
+    // toString simplificado
+    @Override
+    public String toString() {
+        return "Musica{" +
+               "id=" + id +
+               ", titulo='" + titulo + '\'' +
+               ", duracaoSegundos=" + duracaoSegundos +
+               ", numeroFaixa=" + numeroFaixa +
+               '}';
     }
 }
