@@ -17,7 +17,7 @@ public class ArtistaService {
         this.artistaRepository = artistaRepository;
     }
 
-    // 🔹 CRIAR ARTISTA (INSERT LEGADO)
+    // 🔹 CRIAR ARTISTA 
     public ArtistaResponse criar(ArtistaRequest request) {
 
         artistaRepository.inserir(
@@ -30,7 +30,7 @@ public class ArtistaService {
                 request.getRegionalId()
         );
 
-        // 🔹 Retorna o último artista inserido (legado)
+        // 🔹 Retorna o último artista inserido 
         List<Artista> artistas = artistaRepository.listarTodos();
         Artista artista = artistas.get(artistas.size() - 1);
 
@@ -54,7 +54,7 @@ public class ArtistaService {
         return mapToResponse(artista);
     }
 
-    // 🔹 ATUALIZAR ARTISTA (UPDATE LEGADO)
+    // 🔹 ATUALIZAR ARTISTA 
     public ArtistaResponse atualizar(Long id, ArtistaRequest request) {
 
         Artista existente = artistaRepository.buscarPorId(id);

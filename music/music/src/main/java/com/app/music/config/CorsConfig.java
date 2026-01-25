@@ -18,30 +18,34 @@ public class CorsConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
 
-        List<String> origins = Arrays.stream(allowedOrigins.split(","))
-                                     .map(String::trim)
-                                     .toList();
+        List<String> originPatterns = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .toList();
 
-        config.setAllowedOrigins(origins);
+        config.setAllowedOriginPatterns(originPatterns);
 
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
 
         config.setAllowedHeaders(List.of(
-                "Authorization", "Content-Type", "X-Requested-With"
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With"
         ));
 
         config.setExposedHeaders(List.of("Authorization"));
 
-        // só use true se realmente precisar de cookies / sessão
         config.setAllowCredentials(true);
 
         config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", config);
 
         return source;

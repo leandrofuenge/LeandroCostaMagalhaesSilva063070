@@ -39,15 +39,15 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
-                    "/auth/**"
+                    "/auth/**",
+                    "/ws/**",            
+                    "/actuator/health"   
                 ).permitAll()
                 .anyRequest().authenticated()
             )
 
-            // JWT PRIMEIRO
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-            // RATE LIMIT DEPOIS DO JWT
             .addFilterAfter(rateLimitFilter, JwtAuthFilter.class);
 
         return http.build();

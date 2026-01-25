@@ -3,9 +3,11 @@ package com.app.music.service;
 import com.app.music.dto.AlbumRequest;
 import com.app.music.dto.AlbumResponse;
 import com.app.music.entity.Artista;
+import com.app.music.event.AlbumCreatedEvent;
 import com.app.music.projection.AlbumComArtistaProjection;
 import com.app.music.repository.AlbumRepository;
 import com.app.music.repository.ArtistaRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,18 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
     private final ArtistaRepository artistaRepository;
     private final MinioService minioService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public AlbumService(
             AlbumRepository albumRepository,
             ArtistaRepository artistaRepository,
-            MinioService minioService
+            MinioService minioService,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.albumRepository = albumRepository;
         this.artistaRepository = artistaRepository;
         this.minioService = minioService;
+        this.eventPublisher = eventPublisher;
     }
 
     // ===========================
@@ -53,7 +58,13 @@ public class AlbumService {
         List<AlbumComArtistaProjection> albuns =
                 albumRepository.listarPorArtista(artistaId);
 
-        return mapToResponse(albuns.get(albuns.size() - 1));
+        AlbumResponse albumCriado =
+                mapToResponse(albuns.get(albuns.size() - 1));
+
+        // 🔔 Notifica via WebSocket (evento)
+        eventPublisher.publishEvent(new AlbumCreatedEvent(albumCriado));
+
+        return albumCriado;
     }
 
     // ===========================

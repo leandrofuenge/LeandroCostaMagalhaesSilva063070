@@ -36,7 +36,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
                 .getContext()
                 .getAuthentication();
 
-        // Usuário não autenticado → não aplica rate limit
         if (auth == null || !auth.isAuthenticated()) {
             filterChain.doFilter(request, response);
             return;
