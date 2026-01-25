@@ -168,6 +168,15 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Source: https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core -->
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>8.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
@@ -205,7 +214,6 @@
                 </configuration>
             </plugin>
 
-            <!-- WAR Plugin (opcional, Spring Boot já cuida) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
