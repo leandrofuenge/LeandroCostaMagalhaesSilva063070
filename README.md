@@ -280,9 +280,6 @@ Foi muito importante para o projeto compreender o conceito do MinIO e sua aplica
 
 Em relação à recuperação por links pré-assinados, a funcionalidade foi implementada com sucesso. Após análises e ajustes necessários, concluímos e integramos a geração de links pré-assinados com expiração configurável.
 
-
-No momento, esta fase está 80% implementada.
-
 Fase 7
 
 Sétima fase — requisitos direcionados a nível sênior — que inclui Health Checks, Liveness/Readiness, testes unitários, WebSocket, Rate Limit e endpoints regionais.
