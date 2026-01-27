@@ -25,9 +25,6 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
-    // ===========================
-    // Gerar token
-    // ===========================
     @Operation(
         summary = "Gera tokens JWT",
         description = "Gera um access token e um refresh token para um usuário"
@@ -54,9 +51,6 @@ public class AuthController {
         );
     }
 
-    // ===========================
-    // Refresh token
-    // ===========================
     @Operation(
         summary = "Renova o access token",
         description = "Gera um novo access token a partir de um refresh token válido"

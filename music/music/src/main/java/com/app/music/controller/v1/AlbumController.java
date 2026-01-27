@@ -35,9 +35,6 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-    // ===========================
-    // Criar álbum
-    // ===========================
     @Operation(
             summary = "Criar álbum",
             description = "Cria um novo álbum associado a um artista específico"
@@ -74,9 +71,6 @@ public class AlbumController {
         return albumService.criar(artistaId, request);
     }
 
-    // ===========================
-    // Listagens
-    // ===========================
     @Operation(
             summary = "Listar todos os álbuns",
             description = "Retorna uma lista com todos os álbuns cadastrados"
@@ -164,9 +158,6 @@ public class AlbumController {
         return ResponseEntity.ok(albumService.buscarPorNomeArtista(nome, pageable));
     }
 
-    // ===========================
-    // Atualizar álbum
-    // ===========================
     @Operation(
             summary = "Atualizar álbum",
             description = "Atualiza os dados de um álbum existente"
@@ -190,9 +181,6 @@ public class AlbumController {
         return albumService.atualizar(id, request);
     }
 
-    // ===========================
-    // Upload de capas do álbum
-    // ===========================
     @Operation(
             summary = "Upload de capas do álbum",
             description = "Faz upload de uma ou mais imagens de capa para um álbum específico. " +

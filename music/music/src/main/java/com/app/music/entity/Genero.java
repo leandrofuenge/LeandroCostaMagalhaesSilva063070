@@ -114,7 +114,6 @@ public class Genero {
         this.musicas = musicas != null ? musicas : new ArrayList<>();
     }
     
-    // Métodos helper para relacionamentos
     public void addArtista(Artista artista) {
         if (!artistas.contains(artista)) {
             artistas.add(artista);
@@ -157,7 +156,6 @@ public class Genero {
         musica.getGeneros().remove(this);
     }
     
-    // equals e hashCode baseados no ID
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -171,7 +169,6 @@ public class Genero {
         return getClass().hashCode();
     }
     
-    // toString simplificado
     @Override
     public String toString() {
         return "Genero{" +

@@ -17,7 +17,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 🔐 JWT inválido / expirado
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<?> handleJwt(JwtException ex) {
         return ResponseEntity
@@ -28,7 +27,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // 🚫 Acesso negado
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity
@@ -39,7 +37,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // 🔑 Credenciais inválidas
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity
@@ -50,7 +47,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // ❌ Validação de DTO (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
 
@@ -71,7 +67,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // 🔎 Recurso não encontrado (404)
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
         return ResponseEntity
@@ -82,7 +77,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // ⚠️ Regra de negócio
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<?> handleBusiness(BusinessException ex) {
         return ResponseEntity
@@ -93,7 +87,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // 💥 Erro genérico
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {
         return ResponseEntity
@@ -104,7 +97,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // 🔧 Padrão de resposta
     private Map<String, Object> error(HttpStatus status, String message) {
         return Map.of(
                 "timestamp", Instant.now(),

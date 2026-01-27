@@ -60,7 +60,6 @@ public class Musica {
         this.generos = generos != null ? generos : new ArrayList<>();
     }
     
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -148,7 +147,6 @@ public class Musica {
         genero.getMusicas().remove(this);
     }
     
-    // Método para incrementar contador de reproduções
     public void incrementarVezesTocada() {
         if (this.vezesTocada == null) {
             this.vezesTocada = 1;
@@ -157,7 +155,6 @@ public class Musica {
         }
     }
     
-    // Método para obter duração formatada
     @Transient
     public String getDuracaoFormatada() {
         if (duracaoSegundos == null) return "0:00";
@@ -166,7 +163,6 @@ public class Musica {
         return String.format("%d:%02d", minutos, segundos);
     }
     
-    // equals e hashCode baseados no ID
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -180,7 +176,6 @@ public class Musica {
         return getClass().hashCode();
     }
     
-    // toString simplificado
     @Override
     public String toString() {
         return "Musica{" +

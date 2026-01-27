@@ -49,9 +49,6 @@ public class MinioService {
         AwsBasicCredentials creds =
                 AwsBasicCredentials.create(accessKey, secretKey);
 
-        // ===========================
-        // S3 CLIENT (uso interno / upload)
-        // ===========================
         s3Client = S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(creds))
@@ -63,9 +60,6 @@ public class MinioService {
                 )
                 .build();
 
-        // ===========================
-        // 🔥 S3 PRESIGNER (endpoint público)
-        // ===========================
         s3Presigner = S3Presigner.builder()
                 .endpointOverride(URI.create(publicEndpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(creds))
@@ -96,9 +90,6 @@ public class MinioService {
         }
     }
 
-    // ===========================
-    // Upload único
-    // ===========================
     public String uploadFile(MultipartFile file, String key) {
         try {
             PutObjectRequest request = PutObjectRequest.builder()
@@ -118,9 +109,6 @@ public class MinioService {
         }
     }
 
-    // ===========================
-    // Upload múltiplo
-    // ===========================
     public List<String> uploadFiles(List<MultipartFile> files, String prefix) {
         List<String> keys = new ArrayList<>();
 
@@ -136,9 +124,6 @@ public class MinioService {
         return keys;
     }
 
-    // ===========================
-    // Presigned URL (100% correto)
-    // ===========================
     public URL generatePresignedUrl(String key) {
         try {
             GetObjectRequest getObjectRequest =
@@ -166,9 +151,7 @@ public class MinioService {
         }
     }
 
-    // ===========================
-    // Presigned URLs múltiplos
-    // ===========================
+
     public List<URL> generatePresignedUrls(List<String> keys) {
         List<URL> urls = new ArrayList<>();
         for (String key : keys) {

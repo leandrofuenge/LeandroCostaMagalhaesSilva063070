@@ -45,7 +45,6 @@ public class Regional {
         this.artistas = artistas != null ? artistas : new ArrayList<>();
     }
     
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -102,7 +101,6 @@ public class Regional {
         this.artistas = artistas != null ? artistas : new ArrayList<>();
     }
     
-    // Métodos helper para artistas
     public void addArtista(Artista artista) {
         if (!artistas.contains(artista)) {
             artistas.add(artista);
@@ -117,7 +115,6 @@ public class Regional {
         }
     }
     
-    // equals e hashCode baseados no ID
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,7 +128,6 @@ public class Regional {
         return getClass().hashCode();
     }
     
-    // toString simplificado
     @Override
     public String toString() {
         return "Regional{" +

@@ -36,9 +36,7 @@ public class AlbumService {
         this.eventPublisher = eventPublisher;
     }
 
-    // ===========================
-    // Criar álbum
-    // ===========================
+
     public AlbumResponse criar(Long artistaId, AlbumRequest request) {
 
         Artista artista = artistaRepository.findById(artistaId)
@@ -67,9 +65,6 @@ public class AlbumService {
         return albumCriado;
     }
 
-    // ===========================
-    // Upload de capas do álbum
-    // ===========================
     public List<URL> uploadCapas(Long albumId, List<MultipartFile> files) {
 
         AlbumComArtistaProjection album =
@@ -89,9 +84,6 @@ public class AlbumService {
         return minioService.generatePresignedUrls(keys);
     }
 
-    // ===========================
-    // Listagens
-    // ===========================
     public List<AlbumResponse> listarTodos() {
         return albumRepository.listarTodos()
                 .stream()
@@ -132,9 +124,6 @@ public class AlbumService {
                 .map(this::mapToResponse);
     }
 
-    // ===========================
-    // Atualizar álbum
-    // ===========================
     public AlbumResponse atualizar(Long albumId, AlbumRequest request) {
 
         AlbumComArtistaProjection existente =
@@ -161,9 +150,7 @@ public class AlbumService {
         return mapToResponse(atualizado);
     }
 
-    // ===========================
-    // Mapper
-    // ===========================
+
     private AlbumResponse mapToResponse(AlbumComArtistaProjection p) {
         return new AlbumResponse(
                 p.getId(),

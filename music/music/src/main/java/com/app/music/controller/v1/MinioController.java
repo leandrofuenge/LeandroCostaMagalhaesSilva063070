@@ -31,9 +31,6 @@ public class MinioController {
         this.minioService = minioService;
     }
 
-    // =====================================================
-    // Upload único
-    // =====================================================
     @Operation(
             summary = "Upload de um arquivo",
             description = """
@@ -91,9 +88,6 @@ public class MinioController {
         );
     }
 
-    // =====================================================
-    // Upload múltiplo
-    // =====================================================
     @Operation(
             summary = "Upload de múltiplos arquivos",
             description = """

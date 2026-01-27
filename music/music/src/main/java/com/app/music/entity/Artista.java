@@ -45,7 +45,6 @@ public class Artista {
     @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albuns = new ArrayList<>();
 
-    // ============ CONSTRUTORES ============
     public Artista() {
     }
 
@@ -64,7 +63,6 @@ public class Artista {
         this.albuns = albuns != null ? albuns : new ArrayList<>();
     }
 
-    // ============ GETTERS ============
     public Long getId() {
         return id;
     }
@@ -105,7 +103,6 @@ public class Artista {
         return albuns;
     }
 
-    // ============ SETTERS ============
     public void setId(Long id) {
         this.id = id;
     }
@@ -146,7 +143,6 @@ public class Artista {
         this.albuns = albuns != null ? albuns : new ArrayList<>();
     }
 
-    // ============ MÉTODOS HELPER ============
     public void addGenero(Genero genero) {
         if (generos == null) {
             generos = new ArrayList<>();
@@ -179,7 +175,6 @@ public class Artista {
         }
     }
 
-    // ============ toString() ============
     @Override
     public String toString() {
         return "Artista{" +

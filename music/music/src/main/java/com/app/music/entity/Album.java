@@ -208,7 +208,6 @@ public class Album {
         generos.remove(genero);
     }
     
-    // Métodos de callback
     @PostLoad
     @PostPersist
     @PostUpdate
@@ -224,7 +223,6 @@ public class Album {
         }
     }
     
-    // equals e hashCode baseados no ID
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -238,7 +236,6 @@ public class Album {
         return getClass().hashCode();
     }
     
-    // toString simplificado
     @Override
     public String toString() {
         return "Album{" +
