@@ -16,7 +16,7 @@ Este projeto foi pensado para servir como **base sólida de backend**, com fáci
 
 ## 🚀 Tecnologias Utilizadas
 
-- Java 21
+- Java 17
 - Spring Boot
 - Spring Web
 - Spring Data JPA
