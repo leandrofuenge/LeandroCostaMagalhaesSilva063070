@@ -4,7 +4,6 @@ API REST para gerenciamento de **artistas** e **álbuns musicais**, desenvolvida
 
 Este projeto foi pensado para servir como **base sólida de backend**, com fácil evolução para autenticação JWT, Docker e novos módulos.
 
-
 ## 📝 Dados de inscrição
 
 - Nome: Leandro Costa Magalhaes Silva
@@ -79,44 +78,62 @@ GET /api/v1/albuns/{id}
 GET /api/v1/albuns/artista/{artistaId}
 PUT /api/v1/albuns/{id}
 
-
 ## 🚀 Como executar a aplicação
 
+### 🔧 Pré-requisitos
+- Docker
+- Docker Compose
 
--Pré-requisitos (Docker)
+### ▶️ Comandos
 
-Comandos: 
+```bash
+docker compose up -d --build
+docker compose logs -f
+```
 
-1 - docker compose up -d --build
-2 - docker compose logs -f
+---
 
 ## 🧪 Como testar a aplicação
 
-------------------------------------------------------------------------------
-1 - Liberacao de Token
-------------------------------------------------------------------------------
+### 🔐 1. Liberação de Token (Autenticação)
 
+Responsável por gerar o token JWT necessário para acessar os endpoints protegidos.
 
-Metodo: POST
-Endpoint: http://localhost:7070/auth/token?user=usuario
+- **Método:** POST  
+- **Endpoint:**  
+```
+http://localhost:7070/auth/token
+```
 
-Params: Key: user | Value: usuario
+#### Query Params
 
-O usuario copia o refresh token e utiliza para utilizar as funcoes na aplicação
+| Key | Value |
+|----|------|
+| user | usuario |
 
-------------------------------------------------------------------------------
-2 - Criar Artista
-------------------------------------------------------------------------------
+📌 **Observação:**  
+O usuário deve copiar o **refresh token** retornado e utilizá-lo no header `Authorization` como `Bearer {TOKEN}` para acessar as funcionalidades da aplicação.
 
-Metodo: POST
-Endpoint: http://localhost:7070/api/v1/artistas
+---
 
-Headers: Key: Authorization | Bearer "Token"
-         Key: Content-Type  | application/json 
+### 🎤 2. Criar Artista
 
+- **Método:** POST  
+- **Endpoint:**  
+```
+http://localhost:7070/api/v1/artistas
+```
 
-Body -> raw -> json
+#### Headers
 
+| Key | Value |
+|----|------|
+| Authorization | Bearer {TOKEN} |
+| Content-Type | application/json |
+
+#### Body (JSON)
+
+```json
 {
   "nome": "Bastille",
   "descricao": "Banda britânica de indie pop",
@@ -126,22 +143,35 @@ Body -> raw -> json
   "website": "https://www.bastillebastille.com",
   "regionalId": 1
 }
+```
 
+---
 
+### 💿 3. Criar Álbum
 
-------------------------------------------------------------------------------
-3 - Criar álbum
-------------------------------------------------------------------------------
+Cria um álbum associado a um artista específico.
 
-Metodo: POST
-Endpoint: http://localhost:7070/api/v1/albuns/artista/1
+- **Método:** POST  
+- **Endpoint:**  
+```
+http://localhost:7070/api/v1/albuns/artista/{artistaId}
+```
 
-Headers: Key: Content-Type  | application/json
-         Key: Authorization | Bearer "Token"   
+#### Exemplo
+```
+http://localhost:7070/api/v1/albuns/artista/1
+```
 
+#### Headers
 
-Body -> raw -> json
+| Key | Value |
+|----|------|
+| Authorization | Bearer {TOKEN} |
+| Content-Type | application/json |
 
+#### Body (JSON)
+
+```json
 {
   "titulo": "Bad Blood",
   "anoLancamento": 2015,
@@ -151,35 +181,62 @@ Body -> raw -> json
   "numeroFaixas": 12,
   "preco": 39.50
 }
+```
 
+---
 
-------------------------------------------------------------------------------
-4 - Upload de imagem
-------------------------------------------------------------------------------
+### 🖼️ 4. Upload de Imagem da Capa
 
-Metodo: POST
-Endpoint: http://localhost:7070/api/v1/albuns/1/capas
+Permite o upload de uma ou mais imagens de capa do álbum.
 
+- **Método:** POST  
+- **Endpoint:**  
+```
+http://localhost:7070/api/v1/albuns/{albumId}/capas
+```
 
-Headers: Key: Authorization | Bearer "Token"
+#### Exemplo
+```
+http://localhost:7070/api/v1/albuns/1/capas
+```
 
-Body -> form-data 
+#### Headers
 
-     key: files -> file   | Value: selecionar a imagem
-     key: prefix -> Text  | Value: images
+| Key | Value |
+|----|------|
+| Authorization | Bearer {TOKEN} |
 
+#### Body (form-data)
 
-------------------------------------------------------------------------------
-5 - Paginacao 
-------------------------------------------------------------------------------
+| Key | Tipo | Descrição |
+|----|----|-----------|
+| files | File | Imagem da capa |
+| prefix | Text | images |
 
-Metodo: GET
-Endpoint:http://localhost:7070/api/v1/albuns/paginacao?page=0&size=5&sort=titulo,asc
+---
 
+### 📄 5. Paginação de Álbuns
 
-Params: Key: page | Value: 0
-        Key: size | Value: 5
-        Key: sort | Value: titulo,asc
+Consulta paginada com ordenação configurável.
+
+- **Método:** GET  
+- **Endpoint:**  
+```
+http://localhost:7070/api/v1/albuns/paginacao
+```
+
+#### Query Params
+
+| Key | Value |
+|----|------|
+| page | 0 |
+| size | 5 |
+| sort | titulo,asc |
+
+#### Exemplo
+```
+http://localhost:7070/api/v1/albuns/paginacao?page=0&size=5&sort=titulo,asc
+```
 
 ## 📊 Relatório da Aplicação
 
