@@ -1,5 +1,6 @@
 package com.app.music.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,15 +9,13 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.S3Configuration;
 
-import jakarta.annotation.PostConstruct;
-import java.net.URL;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,10 @@ import java.util.List;
 public class MinioService {
 
     @Value("${minio.endpoint}")
-    private String endpoint;
+    private String endpoint; // ex: http://minio:9000
+
+    @Value("${minio.public-endpoint}")
+    private String publicEndpoint; // ex: http://localhost:9000
 
     @Value("${minio.access-key}")
     private String accessKey;
@@ -37,83 +39,135 @@ public class MinioService {
     private String bucket;
 
     @Value("${minio.presigned.expiration}")
-    private Long presignedExpiration; // em segundos
+    private Long presignedExpiration;
 
     private S3Client s3Client;
     private S3Presigner s3Presigner;
 
     @PostConstruct
     public void init() {
-        AwsBasicCredentials creds = AwsBasicCredentials.create(accessKey, secretKey);
+        AwsBasicCredentials creds =
+                AwsBasicCredentials.create(accessKey, secretKey);
 
+        // ===========================
+        // S3 CLIENT (uso interno / upload)
+        // ===========================
         s3Client = S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(creds))
-                .region(Region.US_EAST_1)  // MinIO não exige região específica
-                .serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(true) // necessário para MinIO
-                        .build())
+                .region(Region.US_EAST_1)
+                .serviceConfiguration(
+                        S3Configuration.builder()
+                                .pathStyleAccessEnabled(true)
+                                .build()
+                )
                 .build();
 
+        // ===========================
+        // 🔥 S3 PRESIGNER (endpoint público)
+        // ===========================
         s3Presigner = S3Presigner.builder()
-                .endpointOverride(URI.create(endpoint))
+                .endpointOverride(URI.create(publicEndpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(creds))
                 .region(Region.US_EAST_1)
+                .serviceConfiguration(
+                        S3Configuration.builder()
+                                .pathStyleAccessEnabled(true)
+                                .build()
+                )
                 .build();
+
+        createBucketIfNotExists();
+    }
+
+    private void createBucketIfNotExists() {
+        try {
+            s3Client.headBucket(
+                    HeadBucketRequest.builder()
+                            .bucket(bucket)
+                            .build()
+            );
+        } catch (Exception e) {
+            s3Client.createBucket(
+                    CreateBucketRequest.builder()
+                            .bucket(bucket)
+                            .build()
+            );
+        }
     }
 
     // ===========================
-    // Upload de um arquivo
+    // Upload único
     // ===========================
     public String uploadFile(MultipartFile file, String key) {
         try {
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+            PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucket)
                     .key(key)
                     .contentType(file.getContentType())
                     .build();
 
-            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+            s3Client.putObject(
+                    request,
+                    RequestBody.fromBytes(file.getBytes())
+            );
+
             return key;
         } catch (Exception e) {
-            throw new RuntimeException("Falha no upload do arquivo: " + e.getMessage(), e);
+            throw new RuntimeException("Falha no upload", e);
         }
     }
 
     // ===========================
-    // Upload múltiplo de arquivos
+    // Upload múltiplo
     // ===========================
     public List<String> uploadFiles(List<MultipartFile> files, String prefix) {
         List<String> keys = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            String key = prefix + "/" + System.currentTimeMillis() + "-" + file.getOriginalFilename();
+            String key =
+                    prefix + "/" +
+                    System.currentTimeMillis() + "-" +
+                    file.getOriginalFilename();
+
             uploadFile(file, key);
             keys.add(key);
         }
-
         return keys;
     }
 
     // ===========================
-    // Gerar link pré-assinado único
+    // Presigned URL (100% correto)
     // ===========================
     public URL generatePresignedUrl(String key) {
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucket)
-                .key(key)
-                .build();
+        try {
+            GetObjectRequest getObjectRequest =
+                    GetObjectRequest.builder()
+                            .bucket(bucket)
+                            .key(key)
+                            .build();
 
-        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                .getObjectRequest(getObjectRequest)
-                .signatureDuration(Duration.ofSeconds(presignedExpiration))
-                .build();
+            GetObjectPresignRequest presignRequest =
+                    GetObjectPresignRequest.builder()
+                            .getObjectRequest(getObjectRequest)
+                            .signatureDuration(
+                                    Duration.ofSeconds(presignedExpiration)
+                            )
+                            .build();
 
-        return s3Presigner.presignGetObject(presignRequest).url();
+            return s3Presigner
+                    .presignGetObject(presignRequest)
+                    .url();
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Erro ao gerar URL pré-assinada", e
+            );
+        }
     }
 
     // ===========================
-    // Gerar links pré-assinados múltiplos
+    // Presigned URLs múltiplos
     // ===========================
     public List<URL> generatePresignedUrls(List<String> keys) {
         List<URL> urls = new ArrayList<>();

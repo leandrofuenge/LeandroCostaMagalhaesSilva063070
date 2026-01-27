@@ -278,7 +278,8 @@ A sexta fase abrangeu a integração com MinIO/S3, armazenamento das imagens no 
 
 Foi muito importante para o projeto compreender o conceito do MinIO e sua aplicação prática. A funcionalidade de upload múltiplo — para uma ou mais imagens de capa por álbum — foi baseada em projetos existentes, adaptando-a ao contexto do Spring Boot.
 
-Em relação à recuperação por links pré-assinados, essa parte ainda está em desenvolvimento, pois o link gerado na resposta é um endereço interno do Docker, inacessível diretamente pelo navegador. Estou trabalhando para resolver essa questão e garantir seu funcionamento adequado.
+Em relação à recuperação por links pré-assinados, a funcionalidade foi implementada com sucesso. Após análises e ajustes necessários, concluímos e integramos a geração de links pré-assinados com expiração configurável.
+
 
 No momento, esta fase está 80% implementada.
 

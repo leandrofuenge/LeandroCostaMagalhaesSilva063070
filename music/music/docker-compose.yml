@@ -8,7 +8,6 @@ services:
     environment:
       MYSQL_DATABASE: musicdb
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_ROOT_HOST: "%"
       MYSQL_USER: musicuser
       MYSQL_PASSWORD: musicpass
     ports:
@@ -24,7 +23,6 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 40s
     networks:
       - music-network
 
@@ -33,37 +31,15 @@ services:
     container_name: minio
     restart: unless-stopped
     ports:
-      - "9000:9000"   # API S3
-      - "9001:9001"   # Console Web
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_SERVER_URL: http://localhost:9000
     command: server /data --console-address ":9001"
     volumes:
       - minio-data:/data
-    networks:
-      - music-network
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live || exit 1"]
-    #   interval: 30s
-    #   retries: 3
-    #   start_period: 30s
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin
-    restart: unless-stopped
-    depends_on:
-      mysql:
-        condition: service_healthy
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: rootpassword
-      UPLOAD_LIMIT: 50M
-    ports:
-      - "8080:80"
     networks:
       - music-network
 
@@ -79,29 +55,13 @@ services:
     ports:
       - "7070:7070"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/musicdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: musicuser
-      SPRING_DATASOURCE_PASSWORD: musicpass
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-      SPRING_FLYWAY_ENABLED: "true"
-      SPRING_JPA_SHOW_SQL: "false"
-      SPRING_PROFILES_ACTIVE: "dev"
-      JWT_SECRET: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
-      JWT_EXPIRATION: "300000"
-      SECURITY_ALLOWED_DOMAINS: "http://localhost:3000,http://127.0.0.1:3000"
-      MINIO_ENDPOINT: "http://minio:9000"
-      MINIO_ACCESS_KEY: "minioadmin"
-      MINIO_SECRET_KEY: "minioadmin"
-      MINIO_BUCKET: "music"
-      MINIO_PRESIGNED_EXPIRATION: "1800" # 30 minutos
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: music
+      MINIO_PRESIGNED_EXPIRATION: 1800
     networks:
       - music-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7070/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
 
 networks:
   music-network:
