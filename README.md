@@ -278,7 +278,7 @@ A sexta fase abrangeu a integração com MinIO/S3, armazenamento das imagens no 
 
 Foi muito importante para o projeto compreender o conceito do MinIO e sua aplicação prática. A funcionalidade de upload múltiplo — para uma ou mais imagens de capa por álbum — foi baseada em projetos existentes, adaptando-a ao contexto do Spring Boot.
 
-Em relação à recuperação por links pré-assinados, a funcionalidade foi implementada com sucesso. Após análises e ajustes necessários, concluímos e integramos a geração de links pré-assinados com expiração configurável.
+Em relação à recuperação por links pré-assinados, a funcionalidade foi implementada com sucesso. Após análises e ajustes necessários, concluí e integrei a geração de links pré-assinados com expiração configurável.
 
 Fase 7
 
@@ -291,6 +291,8 @@ Health Checks
 WebSocket para notificar o frontend a cada novo álbum cadastrado
 
 Rate Limit: limite de até 10 requisições por minuto por usuário
+
+Testes unitários
 
 Para desenvolver essas funcionalidades, precisei realizar pesquisas para entender as soluções e implementá-las adequadamente. Ao final, consegui concluir parte dos requisitos planejados.
 
