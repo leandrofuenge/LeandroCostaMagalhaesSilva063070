@@ -22,7 +22,7 @@ Este projeto foi pensado para servir como **base sólida de backend**, com fáci
 - Spring Data JPA
 - Hibernate
 - Bean Validation (Jakarta Validation)
-- Banco de Dados Relacional (PostgreSQL / MySQL)
+- Banco de Dados Relacional (MySQL)
 - Docker
 - Maven
 
