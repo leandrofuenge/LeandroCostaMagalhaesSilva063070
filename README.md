@@ -294,10 +294,9 @@ Rate Limit: limite de até 10 requisições por minuto por usuário
 
 Testes unitários
 
-Para desenvolver essas funcionalidades, precisei realizar pesquisas para entender as soluções e implementá-las adequadamente. Ao final, consegui concluir parte dos requisitos planejados.
+endpoints regionais
 
-Esta fase está 70% implementada.
-
+Para desenvolver essas funcionalidades, precisei realizar pesquisas para entender as soluções e implementá-las adequadamente. Ao final, consegui concluir todos os requisitos.
 
 Priorizei o desenvolvimento por fases para otimizar o desempenho e a organização do trabalho. O Produto Mínimo Viável (MVP) foi essencial nas etapas iniciais, permitindo obter rapidamente um produto funcional. O Spring Boot facilitou bastante o processo, gerenciando automaticamente muitas configurações técnicas.
 
