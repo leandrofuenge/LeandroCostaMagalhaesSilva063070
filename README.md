@@ -303,3 +303,12 @@ Priorizei o desenvolvimento por fases para otimizar o desempenho e a organizaç�
 A escalabilidade e a manutenibilidade foram preocupações centrais ao longo do planejamento. A divisão em fases permitiu que o sistema crescesse de forma ordenada e sustentável. A aplicação foi estruturada em uma arquitetura MVC monolítica, o que, aliado à abordagem incremental, possibilitou a introdução progressiva de camadas como segurança (Spring Security) sem a necessidade de reescrever a base do código existente.
 
 Dessa forma, o projeto pode evoluir com consistência, mantendo a qualidade e permitindo futuras expansões de maneira controlada.
+
+
+
+## Portas da aplicação
+
+Swagger: http://localhost:7070/swagger-ui/index.html
+aplicação raiz: localhost:7070
+MINIO: http://127.0.0.1:9000
+PhpMyAdmin: localhost:9090
