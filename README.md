@@ -306,9 +306,15 @@ Dessa forma, o projeto pode evoluir com consistência, mantendo a qualidade e pe
 
 
 
-## Portas da aplicação
+## 🚪 Portas da Aplicação
 
-Swagger: http://localhost:7070/swagger-ui/index.html
-aplicação raiz: localhost:7070
-MINIO: http://127.0.0.1:9000
-PhpMyAdmin: localhost:9090
+Abaixo estão os principais serviços e seus respectivos endereços locais para acesso durante o desenvolvimento:
+
+| Serviço        | URL |
+|---------------|-----|
+| 📘 Swagger UI | http://localhost:7070/swagger-ui/index.html |
+| 🚀 Aplicação  | http://localhost:7070 |
+| 🗄️ MinIO      | http://127.0.0.1:9000 |
+| 🐬 phpMyAdmin | http://localhost:9090 |
+
+> ⚠️ Certifique-se de que todos os containers/serviços estejam em execução antes de acessar os links acima.
