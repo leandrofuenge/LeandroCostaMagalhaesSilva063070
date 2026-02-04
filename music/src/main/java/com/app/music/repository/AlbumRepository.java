@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
-    // 🔹 LISTAR TODOS COM ARTISTA 
+    // LISTAR TODOS COM ARTISTA 
     @Query(value = """
         SELECT 
             a.id,
@@ -32,7 +32,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
         """, nativeQuery = true)
     List<AlbumComArtistaProjection> listarTodos();
 
-    // 🔹 BUSCAR POR ID
+    // BUSCAR POR ID
     @Query(value = """
         SELECT 
             a.id,
@@ -52,7 +52,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
         """, nativeQuery = true)
     AlbumComArtistaProjection buscarPorId(@Param("id") Long id);
 
-    // 🔹 LISTAR POR ARTISTA
+    // LISTAR POR ARTISTA
     @Query(value = """
         SELECT 
             a.id,
@@ -72,7 +72,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
         """, nativeQuery = true)
     List<AlbumComArtistaProjection> listarPorArtista(@Param("artistaId") Long artistaId);
 
-    // 🔹 INSERT 
+    // INSERT 
     @Modifying
     @Transactional
     @Query(value = """
@@ -92,7 +92,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
             @Param("artistaId") Long artistaId
     );
 
-    // 🔹 UPDATE 
+    // UPDATE 
     @Modifying
     @Transactional
     @Query(value = """

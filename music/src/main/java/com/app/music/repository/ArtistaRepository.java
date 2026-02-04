@@ -9,15 +9,15 @@ import java.util.List;
 
 public interface ArtistaRepository extends JpaRepository<Artista, Long> {
 
-    // 🔹 LISTAR TODOS
+    // LISTAR TODOS
     @Query(value = "SELECT * FROM artistas", nativeQuery = true)
     List<Artista> listarTodos();
 
-    // 🔹 BUSCAR POR ID
+    // BUSCAR POR ID
     @Query(value = "SELECT * FROM artistas WHERE id = :id", nativeQuery = true)
     Artista buscarPorId(@Param("id") Long id);
 
-    // 🔹 INSERT 
+    // INSERT 
     @Modifying
     @Transactional
     @Query(value = """
@@ -36,7 +36,7 @@ public interface ArtistaRepository extends JpaRepository<Artista, Long> {
             @Param("regionalId") Long regionalId
     );
 
-    // 🔹 UPDATE 
+    // UPDATE 
     @Modifying
     @Transactional
     @Query(value = """

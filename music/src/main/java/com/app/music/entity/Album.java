@@ -56,7 +56,6 @@ public class Album {
     @OrderBy("numeroFaixa ASC")
     private List<Musica> musicas = new ArrayList<>();
     
-    // Construtores
     public Album() {
     }
     
@@ -78,7 +77,6 @@ public class Album {
         this.musicas = musicas != null ? musicas : new ArrayList<>();
     }
     
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -183,7 +181,6 @@ public class Album {
         this.musicas = musicas != null ? musicas : new ArrayList<>();
     }
     
-    // Métodos helper
     public void addMusica(Musica musica) {
         if (!musicas.contains(musica)) {
             musicas.add(musica);

@@ -17,7 +17,7 @@ public class ArtistaService {
         this.artistaRepository = artistaRepository;
     }
 
-    // 🔹 CRIAR ARTISTA 
+    // CRIAR ARTISTA 
     public ArtistaResponse criar(ArtistaRequest request) {
 
         artistaRepository.inserir(
@@ -30,14 +30,14 @@ public class ArtistaService {
                 request.getRegionalId()
         );
 
-        // 🔹 Retorna o último artista inserido 
+        // Retorna o último artista inserido 
         List<Artista> artistas = artistaRepository.listarTodos();
         Artista artista = artistas.get(artistas.size() - 1);
 
         return mapToResponse(artista);
     }
 
-    // 🔹 LISTAR TODOS
+    // LISTAR TODOS
     public List<ArtistaResponse> listarTodos() {
         return artistaRepository.listarTodos()
                 .stream()
@@ -45,7 +45,7 @@ public class ArtistaService {
                 .toList();
     }
 
-    // 🔹 BUSCAR POR ID
+    // BUSCAR POR ID
     public ArtistaResponse buscarPorId(Long id) {
         Artista artista = artistaRepository.buscarPorId(id);
         if (artista == null) {
@@ -54,7 +54,7 @@ public class ArtistaService {
         return mapToResponse(artista);
     }
 
-    // 🔹 ATUALIZAR ARTISTA 
+    // ATUALIZAR ARTISTA 
     public ArtistaResponse atualizar(Long id, ArtistaRequest request) {
 
         Artista existente = artistaRepository.buscarPorId(id);
@@ -76,7 +76,7 @@ public class ArtistaService {
         return mapToResponse(atualizado);
     }
 
-    // 🔹 MAPEAMENTO CENTRALIZADO
+    // MAPEAMENTO CENTRALIZADO
     private ArtistaResponse mapToResponse(Artista a) {
         return new ArtistaResponse(
                 a.getId(),

@@ -28,7 +28,6 @@ public class RegionalEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-
     public Long getId() {
         return id;
     }

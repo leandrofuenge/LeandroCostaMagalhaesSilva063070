@@ -59,7 +59,6 @@ public class AlbumService {
         AlbumResponse albumCriado =
                 mapToResponse(albuns.get(albuns.size() - 1));
 
-        // 🔔 Notifica via WebSocket (evento)
         eventPublisher.publishEvent(new AlbumCreatedEvent(albumCriado));
 
         return albumCriado;
@@ -74,13 +73,10 @@ public class AlbumService {
             throw new RuntimeException("Álbum não encontrado");
         }
 
-        // 📁 Caminho no MinIO
         String prefix = "albums/" + albumId + "/covers";
 
-        // ⬆️ Upload
         List<String> keys = minioService.uploadFiles(files, prefix);
 
-        // 🔗 URLs pré-assinadas
         return minioService.generatePresignedUrls(keys);
     }
 
@@ -149,7 +145,6 @@ public class AlbumService {
 
         return mapToResponse(atualizado);
     }
-
 
     private AlbumResponse mapToResponse(AlbumComArtistaProjection p) {
         return new AlbumResponse(

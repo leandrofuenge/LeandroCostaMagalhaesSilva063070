@@ -42,7 +42,6 @@ public class Musica {
     )
     private List<Genero> generos = new ArrayList<>();
     
-    // Construtores
     public Musica() {
     }
     
@@ -132,7 +131,6 @@ public class Musica {
         this.generos = generos != null ? generos : new ArrayList<>();
     }
     
-    // Métodos helper para gêneros
     public void addGenero(Genero genero) {
         if (!generos.contains(genero)) {
             generos.add(genero);

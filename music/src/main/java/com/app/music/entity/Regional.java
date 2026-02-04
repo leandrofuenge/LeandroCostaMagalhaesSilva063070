@@ -30,7 +30,6 @@ public class Regional {
     @OneToMany(mappedBy = "regional")
     private List<Artista> artistas = new ArrayList<>();
     
-    // Construtores
     public Regional() {
     }
     

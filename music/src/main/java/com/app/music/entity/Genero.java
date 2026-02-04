@@ -33,7 +33,6 @@ public class Genero {
     @ManyToMany(mappedBy = "generos")
     private List<Musica> musicas = new ArrayList<>();
     
-    // Construtores
     public Genero() {
     }
     
@@ -49,7 +48,6 @@ public class Genero {
         this.musicas = musicas != null ? musicas : new ArrayList<>();
     }
     
-    // Getters e Setters
     public Long getId() {
         return id;
     }
