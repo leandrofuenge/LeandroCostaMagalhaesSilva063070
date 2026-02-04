@@ -237,6 +237,29 @@ http://localhost:7070/api/v1/albuns/paginacao
 ```
 http://localhost:7070/api/v1/albuns/paginacao?page=0&size=5&sort=titulo,asc
 ```
+---
+
+### 🔄 5. Teste de Sincronização das Regionais
+
+Consulta paginada com ordenação configurável.
+
+- **Método:** POST  
+- **Endpoint:**  
+```
+http://localhost:7070/api/v1/regionais/sincronizar
+```
+
+#### Headers
+
+| Key | Value |
+|----|------|
+| Authorization | Bearer {TOKEN} |
+
+#### Exemplo
+```
+http://localhost:7070/api/v1/regionais/sincronizar
+```
+
 
 ## 📊 Relatório da Aplicação
 
