@@ -30,7 +30,7 @@ Este projeto foi pensado para servir como **base sólida de backend**, com fáci
 
 ## 🏗️ Arquitetura
 
-O projeto segue uma arquitetura em camadas: MVC
+O projeto segue uma **arquitetura MVC monolítica**, estruturada em camadas bem definidas.
 
 
 ### 🔹 Destaques
@@ -239,9 +239,9 @@ http://localhost:7070/api/v1/albuns/paginacao?page=0&size=5&sort=titulo,asc
 ```
 ---
 
-### 🔄 5. Teste de Sincronização das Regionais
+### 🔄 6. Teste de Sincronização das Regionais
 
-Consulta paginada com ordenação configurável.
+Responsável por executar o processo de sincronização de dados entre regionais.
 
 - **Método:** POST  
 - **Endpoint:**  
